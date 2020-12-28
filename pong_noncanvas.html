@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+ <style>
+  body {
+   margin: auto;
+  }
+ </style>
+<head>
+</head>
+<body>
+ <script>
+  
+  gameArea= document.createElement('div');
+  gameArea.style.width = '100vmin';
+  gameArea.style.height= '100vmin';
+  gameArea.style.backgroundColor = 'black';
+  gameArea.style.position='fixed'
+  document.body.appendChild(gameArea);
+
+  playerPaddle = document.createElement('div');
+  playerPaddle.style.height = '12vmin';
+  playerPaddle.style.width = '1.5vmin' ;
+  playerPaddle.style.position = 'fixed';
+  playerPaddle.style.left = '2vmin';
+  playerPaddle.style.backgroundColor = 'white';
+  document.body.appendChild(playerPaddle);
+  
+  vmin = document.createElement('div');
+  vmin.style.width = '2vmin';
+  vmin.style.height = '2vmin';
+  vmin.style.backgroundColor = 'black';
+  vmin.position = 'fixed';
+  document.body.appendChild(vmin);
+  vminRect = vmin.getBoundingClientRect();
+
+  document.getElementsByTagName('html')
+  [0].addEventListener('mousemove',function (e) {
+   mx = e.clientX;
+   my = e.clientY;
+   console.log(mx,my);
+   // To find center of the paddle and move it by our cursor
+   playerPaddleRect = playerPaddle.getBoundingClientRect(); 
+   console.log(playerPaddleRect.height);
+   playerPaddle.style.top=(my-(playerPaddleRect.height/2))+'px'
+  });
+
+  ball = document.createElement('div');
+  ball.style.width = '1.5vmin';
+  ball.style.height = '1.5vmin';
+  ball.style.position = 'fixed';
+  ball.style.backgroundColor = 'white';
+  gameAreaRect = gameArea.getBoundingClientRect();
+
+  oPaddle = document.createElement('div');
+  oPaddle.style.height = '12vmin';
+  oPaddle.style.width = '1.5vmin' ;
+  oPaddle.style.position = 'fixed';
+  oPaddle.style.left = (gameAreaRect.width-((3.5*gameAreaRect.width)/100))+'px' 
+  //oPaddle.style.top='50vmin'; // çalışmıyor dön bak..
+  oPaddle.style.backgroundColor = 'white';
+  document.body.appendChild(oPaddle);
+  oPaddley = gameAreaRect.height/2;
+  oPaddleys =2.5;  //by this variable we can change the speed of the secondf paddle
+ 
+
+  document.body.appendChild(ball);
+  ballRect = ball.getBoundingClientRect();
+  ballx = ((gameAreaRect.width/2)-(ballRect.width/2));
+  bally = ((gameAreaRect.height/2)-(ballRect.height/2));
+  ballxs =-1;
+  ballys =0;
+  ball.style.left = ((gameAreaRect.width/2)-(ballRect.width/2))+'px'
+  ball.style.top = ((gameAreaRect.height/2)-(ballRect.height/2))+'px'
+
+  function anim(){
+   ballx += ballxs;
+   bally += ballys;
+   ball.style.left = ballx + 'px';
+   ball.style.top = bally + 'px';
+
+   gameAreaRect = gameArea.getBoundingClientRect();
+   playerPaddleRect = playerPaddle.getBoundingClientRect(); 
+   ballRect = ball.getBoundingClientRect();
+   oPaddleRect = oPaddle.getBoundingClientRect();
+   
+   ballyc = ballRect.top+(ballRect.height/2);
+  // playerPaddle.style.backgroundColor = '#fff';
+
+   if (oPaddleRect.top+(oPaddleRect.height/2)<ballyc) { // 
+    oPaddley+=oPaddleys // 
+   }
+   if (oPaddleRect.top+(oPaddleRect.height/2)>ballyc) {
+    oPaddley-=oPaddleys
+   }
+   oPaddle.style.top=oPaddley+'px'; // changing the position of the paddle
+
+   if (playerPaddleRect.left + playerPaddleRect.width >ballRect.left && 
+    playerPaddleRect.top<ballRect.top+ballRect.height && 
+    playerPaddleRect.top+playerPaddleRect.height>ballRect.top &&
+    playerPaddleRect.left<ballRect.left+ballRect.width) {
+
+      
+      ballxs = Math.abs(ballxs);
+      //y center of the ball
+      ballyc = ballRect.top+(ballRect.height/2);
+      //y center of the paddle
+      paddleyc = playerPaddleRect.top+(playerPaddleRect.height/2);
+      if(ballyc<paddleyc){
+        ballys = (ballyc-paddleyc)*0.08;  // the value can be changed and by the value we can set the bouncing degree and ball speed of the ball
+      }
+      if(ballyc > paddleyc){
+        ballys = (ballyc-paddleyc)*0.08;
+      }
+   }
+   if (oPaddleRect.left + oPaddleRect.width >ballRect.left && 
+    oPaddleRect.top<ballRect.top+ballRect.height && 
+    oPaddleRect.top+oPaddleRect.height>ballRect.top &&
+    oPaddleRect.left<ballRect.left+ballRect.width) {
+
+      
+      ballxs = -Math.abs(ballxs);
+      //y center of the ball
+      ballyc = ballRect.top+(ballRect.height/2);
+      //y center of the paddle
+      paddleyc = oPaddleRect.top+(oPaddleRect.height/2);
+      if(ballyc<paddleyc){
+        ballys = (ballyc-paddleyc)*0.08;  // the value can be changed and by the value we can set the bouncing degree and ball speed of the ball
+      }
+      if(ballyc > paddleyc){
+        ballys = (ballyc-paddleyc)*0.08;
+      }
+   }
+   if (ballRect.top <0){
+    ballys = Math.abs(ballys);
+   }
+   if (ballRect.top+ballRect.height>gameAreaRect.height){
+    ballys = -Math.abs(ballys);
+   }
+   if(ballRect.left <0){
+    ballx = ((gameAreaRect.width/2)-(ballRect.width/2));
+    bally = ((gameAreaRect.height/2)-(ballRect.height/2));
+    ballxs =-1;
+    ballys = 0;
+   }
+   if(ballRect.left+ballRect.width>gameAreaRect.width){
+    ballx = ((gameAreaRect.width/2)-(ballRect.width/2));
+    bally = ((gameAreaRect.height/2)-(ballRect.height/2));
+    ballxs =-1;
+    ballys = 0;
+   }
+
+   window.requestAnimationFrame(anim);
+  }
+
+  window.requestAnimationFrame(anim);
+ </script>
+</body>
+</html>
