@@ -8,14 +8,27 @@
 <head>
 </head>
 <body>
+ <div id="scoreLeft">0</div>
+ <div id="scoreRight">0</div>
  <script>
   
+  scoreLEFT = document.querySelector("#scoreLeft");
+  scoreRIGHT = document.querySelector("#scoreRight");
+
+  scoreRIGHT.style.color='white';
+  scoreLEFT.style.color='white';
+  
+
   gameArea= document.createElement('div');
   gameArea.style.width = '100vmin';
   gameArea.style.height= '100vmin';
   gameArea.style.backgroundColor = 'black';
   gameArea.style.position='fixed'
   document.body.appendChild(gameArea);
+  
+  gameArea.appendChild(scoreLEFT);
+  gameArea.appendChild(scoreRIGHT);
+  
 
   playerPaddle = document.createElement('div');
   playerPaddle.style.height = '12vmin';
@@ -51,6 +64,7 @@
   ball.style.backgroundColor = 'white';
   gameAreaRect = gameArea.getBoundingClientRect();
 
+
   oPaddle = document.createElement('div');
   oPaddle.style.height = '12vmin';
   oPaddle.style.width = '1.5vmin' ;
@@ -60,7 +74,7 @@
   oPaddle.style.backgroundColor = 'white';
   document.body.appendChild(oPaddle);
   oPaddley = gameAreaRect.height/2;
-  oPaddleys =2.5;  //by this variable we can change the speed of the secondf paddle
+  oPaddleys =1;  //by this variable we can change the speed of the secondf paddle
  
 
   document.body.appendChild(ball);
@@ -72,7 +86,11 @@
   ball.style.left = ((gameAreaRect.width/2)-(ballRect.width/2))+'px'
   ball.style.top = ((gameAreaRect.height/2)-(ballRect.height/2))+'px'
 
+  scoreLeft = 0;
+  scoreRight = 0;
+
   function anim(){
+  
    ballx += ballxs;
    bally += ballys;
    ball.style.left = ballx + 'px';
@@ -141,12 +159,18 @@
     bally = ((gameAreaRect.height/2)-(ballRect.height/2));
     ballxs =-1;
     ballys = 0;
+    scoreRight++;
+    document.getElementById('scoreRight').innerHTML = scoreRight;
+    
    }
    if(ballRect.left+ballRect.width>gameAreaRect.width){
     ballx = ((gameAreaRect.width/2)-(ballRect.width/2));
     bally = ((gameAreaRect.height/2)-(ballRect.height/2));
     ballxs =-1;
     ballys = 0;
+    scoreLeft++;
+    document.getElementById('scoreLeft').innerHTML = scoreLeft;
+		  ;
    }
 
    window.requestAnimationFrame(anim);
